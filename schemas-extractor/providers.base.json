@@ -7,7 +7,6 @@
     "go_envs": "GO111MODULE=off",
     "provider_args": ""
   },
-
   "scaffolding": {
     "skip_generation": true
   },
@@ -17,10 +16,9 @@
     "repository": "github.com/terraform-providers/terraform-provider-azure-classic",
     "pkg_name": "azure"
   },
-  "azure-classic" : {
+  "azure-classic": {
     "skip_generation": true
   },
-
   "archive": {
   },
   "cloudinit": {
@@ -60,7 +58,6 @@
   "tls": {
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
-
   "aci": {},
   "acme": {},
   "akamai": {},
@@ -77,11 +74,13 @@
   "baiducloud": {},
   "bigip": {},
   "bitbucket": {},
+  "boundary": {
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+  },
   "brightbox": {},
   "checkpoint": {},
   "chef": {},
   "cherryservers": {},
-  "cidr": {},
   "circonus": {},
   "ciscoasa": {},
   "clc": {},
@@ -90,9 +89,12 @@
   "cloudscale": {},
   "cloudstack": {},
   "cobbler": {},
-  "cohesity" : {},
-  "constellix" : {},
+  "cohesity": {},
+  "constellix": {},
   "consul": {},
+  "corner": {
+    "repository": "github.com/hashicorp/terraform-provider-corner"
+  },
   "datadog": {},
   "digitalocean": {},
   "dme": {},
@@ -100,7 +102,7 @@
   "docker": {},
   "dome9": {},
   "dyn": {},
-  "ecl" : {
+  "ecl": {
     "go_envs": "GO111MODULE=on"
   },
   "exoscale": {},
@@ -130,13 +132,13 @@
   "influxdb": {},
   "infoblox": {},
   "jdcloud": {},
-  "ksyun" : {},
+  "ksyun": {},
   "kubernetes": {},
-  "kubernetes-alpha" : {
+  "kubernetes-alpha": {
     "pkg_name": "provider",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
-  "lacework" : {},
+  "lacework": {},
   "launchdarkly": {},
   "librato": {},
   "linode": {},
@@ -207,6 +209,6 @@
   },
   "vthunder": {},
   "vultr": {},
-  "wavefront" : {},
+  "wavefront": {},
   "yandex": {}
 }
