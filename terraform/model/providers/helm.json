@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "helm",
   "type": "provider",
-  "version": "v1.2.3",
+  "version": "v1.3.2",
   "provider": {
     "debug": {
       "Type": "Bool",
@@ -263,7 +263,7 @@
         "Description": "Location of public keys used for verification. Used only if `verify` is true",
         "Default": {
           "Type": "string",
-          "Value": "/home/builduser/.gnupg/pubring.gpg"
+          "Value": "/Users/mhaidara/.gnupg/pubring.gpg"
         }
       },
       "lint": {
@@ -294,6 +294,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "app_version": {
+              "Type": "String",
+              "Description": "The version number of the application being deployed.",
+              "Computed": true
+            },
             "chart": {
               "Type": "String",
               "Description": "The name of the chart.",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "vault",
   "type": "provider",
-  "version": "v2.11.0",
+  "version": "v2.15.0",
   "provider": {
     "add_address_to_env": {
       "Type": "String",
@@ -1349,6 +1349,16 @@
         "Description": "The default TTL in seconds for STS credentials. When a TTL is not specified when STS credentials are requested, and a default TTL is specified on the role, then this default TTL will be used. Valid only when credential_type is one of assumed_role or federation_token.",
         "Computed": true
       },
+      "iam_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of IAM group names. IAM users generated against this vault role will be added to these IAM Groups. For a credential type of assumed_role or federation_token, the policies sent to the corresponding AWS call (sts:AssumeRole or sts:GetFederation) will be the policies from each group in iam_groups combined with the policy_document and policy_arns parameters.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "max_sts_ttl": {
         "Type": "Int",
         "Optional": true,
@@ -2351,6 +2361,47 @@
           }
         }
       },
+      "mongodbatlas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the mongodbatlas-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "hana",
+          "mongodb",
+          "mssql",
+          "mysql",
+          "mysql_rds",
+          "mysql_aurora",
+          "mysql_legacy",
+          "postgresql",
+          "oracle",
+          "elasticsearch"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "private_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Private Programmatic API Key used to connect with MongoDB Atlas API."
+            },
+            "project_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Project ID the Database User should be created within."
+            },
+            "public_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Public Programmatic API Key used to authenticate with the MongoDB Atlas API."
+            }
+          }
+        }
+      },
       "mssql": {
         "Type": "List",
         "Optional": true,
@@ -3116,6 +3167,11 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
       },
+      "local": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Local mount flag that can be explicitly set to true to enforce local mount in HA environment"
+      },
       "max_lease_ttl_seconds": {
         "Type": "Int",
         "Optional": true,
@@ -3760,6 +3816,15 @@
       }
     },
     "vault_identity_group": {
+      "external_member_entity_ids": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Manage member entities externally through `vault_identity_group_policies_member_entity_ids`",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "external_policies": {
         "Type": "Bool",
         "Optional": true,
@@ -3773,7 +3838,6 @@
         "Type": "Set",
         "Optional": true,
         "Description": "Entity IDs to be assigned as group members.",
-        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -3841,6 +3905,37 @@
         "Type": "String",
         "Required": true,
         "Description": "Name of the group alias."
+      }
+    },
+    "vault_identity_group_member_entity_ids": {
+      "exclusive": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Should the resource manage member entity ids exclusively? Beware of race conditions when disabling exclusive management",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "group_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the group."
+      },
+      "group_name": {
+        "Type": "String",
+        "Description": "Name of the group.",
+        "Computed": true
+      },
+      "member_entity_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Entity IDs to be assigned as group members.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vault_identity_group_policies": {
@@ -4419,6 +4514,18 @@
           "Value": "kubernetes"
         }
       },
+      "disable_iss_validation": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Optional disable JWT issuer validation. Allows to skip ISS validation.",
+        "Computed": true
+      },
+      "disable_local_ca_jwt": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Optional disable defaulting to the local CA cert and service account JWT when running in a Kubernetes pod.",
+        "Computed": true
+      },
       "issuer": {
         "Type": "String",
         "Optional": true,
@@ -4913,6 +5020,15 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount"
       },
+      "external_entropy_access": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable the secrets engine to access Vault's external entropy source",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "local": {
         "Type": "Bool",
         "Optional": true,
@@ -5275,6 +5391,16 @@
         "Type": "String",
         "Optional": true,
         "Description": "Time to leave."
+      },
+      "uri_sans": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of alternative URIs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vault_pki_secret_backend_config_ca": {
@@ -6304,6 +6430,23 @@
         "Description": "The policy document"
       }
     },
+    "vault_quota_rate_limit": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the quota."
+      },
+      "path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path of the mount or namespace to apply the quota. A blank path configures a global rate limit quota."
+      },
+      "rate": {
+        "Type": "Float",
+        "Required": true,
+        "Description": "The maximum number of requests at any given second to be allowed by the quota rule. The rate must be positive."
+      }
+    },
     "vault_rabbitmq_secret_backend": {
       "connection_uri": {
         "Type": "String",
@@ -6454,6 +6597,11 @@
       }
     },
     "vault_ssh_secret_backend_role": {
+      "algorithm_signer": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "allow_bare_domains": {
         "Type": "Bool",
         "Optional": true,
@@ -6513,6 +6661,14 @@
       "allowed_users": {
         "Type": "String",
         "Optional": true
+      },
+      "allowed_users_template": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "backend": {
         "Type": "String",
@@ -6947,7 +7103,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies the type of key to create. The currently-supported types are: aes128-gcm96, aes256-gcm96, chacha20-poly1305, ed25519, ecdsa-p256, ecdsa-p384, ecdsa-p521, rsa-2048, rsa-4096",
+        "Description": "Specifies the type of key to create. The currently-supported types are: aes128-gcm96, aes256-gcm96, chacha20-poly1305, ed25519, ecdsa-p256, ecdsa-p384, ecdsa-p521, rsa-2048, rsa-3072, rsa-4096",
         "Default": {
           "Type": "string",
           "Value": "aes256-gcm96"
@@ -7061,6 +7217,11 @@
         "Type": "String",
         "Description": "Time at which the lease was read, using the clock of the system where Terraform was running",
         "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Region the read credentials belong to."
       },
       "role": {
         "Type": "String",
@@ -7513,6 +7674,18 @@
           "Value": "kubernetes"
         }
       },
+      "disable_iss_validation": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Optional disable JWT issuer validation. Allows to skip ISS validation.",
+        "Computed": true
+      },
+      "disable_local_ca_jwt": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Optional disable defaulting to the local CA cert and service account JWT when running in a Kubernetes pod.",
+        "Computed": true
+      },
       "issuer": {
         "Type": "String",
         "Optional": true,
@@ -7796,6 +7969,65 @@
             }
           }
         }
+      }
+    },
+    "vault_transit_decrypt": {
+      "backend": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Transit secret backend the key belongs to."
+      },
+      "ciphertext": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Transit encrypted cipher text."
+      },
+      "context": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies the context for key derivation"
+      },
+      "key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the decryption key to use."
+      },
+      "plaintext": {
+        "Type": "String",
+        "Description": "Decrypted plain text",
+        "Computed": true
+      }
+    },
+    "vault_transit_encrypt": {
+      "backend": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Transit secret backend the key belongs to."
+      },
+      "ciphertext": {
+        "Type": "String",
+        "Description": "Transit encrypted cipher text.",
+        "Computed": true
+      },
+      "context": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies the context for key derivation"
+      },
+      "key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the encryption key to use."
+      },
+      "key_version": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The version of the key to use for encryption"
+      },
+      "plaintext": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Map of strings read from Vault."
       }
     }
   }

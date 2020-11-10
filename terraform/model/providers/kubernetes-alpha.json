@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-tfplugin5",
   "name": "kubernetes-alpha",
   "type": "provider",
-  "version": "v0.1.0",
+  "version": "v0.2.1",
   "provider": {
     "client_certificate": {
       "Type": "String",
@@ -41,7 +41,7 @@
       "ConfigImplicitMode": "Attr"
     },
     "exec": {
-      "Type": "Object({ api_version=String args=List(String) command=String env=Map(String)})",
+      "Type": "Object({ api_version=String args=List(String) command=String env=Map(String) })",
       "Optional": true,
       "ConfigImplicitMode": "Attr"
     },
@@ -81,12 +81,20 @@
       "manifest": {
         "Type": "Any",
         "Required": true,
+        "Description": "A Kubernetes manifest describing the desired state of the resource in HCL format.",
         "ConfigImplicitMode": "Attr"
       },
       "object": {
         "Type": "Any",
         "Optional": true,
+        "Description": "The resulting resource state, as returned by the API server after applying the desired state from `manifest`.",
         "Computed": true,
+        "ConfigImplicitMode": "Attr"
+      },
+      "wait_for": {
+        "Type": "Object({ fields=Map(String) })",
+        "Optional": true,
+        "Description": "A map of attribute paths and desired patterns to be matched. After each apply the provider will wait for all attributes listed here to reach a value that matches the desired pattern.",
         "ConfigImplicitMode": "Attr"
       }
     }

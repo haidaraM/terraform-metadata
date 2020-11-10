@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "tfe",
   "type": "provider",
-  "version": "v0.19.0",
+  "version": "v0.22.0",
   "provider": {
     "hostname": {
       "Type": "String",
@@ -23,6 +23,34 @@
       "destination_type": {
         "Type": "String",
         "Required": true
+      },
+      "email_addresses": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "token",
+          "url"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "email_user_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "token",
+          "url"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "enabled": {
         "Type": "Bool",
@@ -51,7 +79,11 @@
       },
       "url": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "ConflictsWith": [
+          "email_addresses",
+          "email_user_ids"
+        ]
       },
       "workspace_external_id": {
         "Type": "String",
@@ -139,6 +171,10 @@
       "organization": {
         "Type": "String",
         "Required": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "tfe_organization_token": {
@@ -288,6 +324,45 @@
         "Optional": true,
         "Default": {
           "Type": "string"
+        }
+      }
+    },
+    "tfe_registry_module": {
+      "module_provider": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "organization": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vcs_repo": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "display_identifier": {
+              "Type": "String",
+              "Required": true
+            },
+            "identifier": {
+              "Type": "String",
+              "Required": true
+            },
+            "oauth_token_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
         }
       }
     },
@@ -596,6 +671,14 @@
           "Value": "true"
         }
       },
+      "speculative_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "ssh_key_id": {
         "Type": "String",
         "Optional": true,
@@ -660,6 +743,38 @@
     }
   },
   "data-sources": {
+    "tfe_oauth_client": {
+      "api_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "http_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "oauth_client_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "oauth_token_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "tfe_organization_membership": {
+      "email": {
+        "Type": "String",
+        "Required": true
+      },
+      "organization": {
+        "Type": "String",
+        "Required": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "tfe_ssh_key": {
       "name": {
         "Type": "String",
@@ -752,6 +867,10 @@
         "Required": true
       },
       "queue_all_runs": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "speculative_enabled": {
         "Type": "Bool",
         "Computed": true
       },
