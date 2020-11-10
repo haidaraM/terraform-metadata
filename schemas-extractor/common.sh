@@ -37,7 +37,7 @@ function update_or_clone() {
     git -C "$location" fetch --tags >/dev/null 2>&1 || echo "ERROR: Failed to update '$repository'"
   else
     echo "Cloning $repository"
-    git clone --quiet "https://$repository" "$location" >/dev/null 2>&1
+    git clone --depth=1 --quiet "https://$repository" "$location" >/dev/null 2>&1
   fi
 }
 
