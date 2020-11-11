@@ -146,7 +146,9 @@
   "logicmonitor": {},
   "mailgun": {},
   "metalcloud": {},
-  "mongodbatlas": {},
+  "mongodbatlas": {
+    "repository": "github.com/mongodb/terraform-provider-__NAME__"
+  },
   "mso": {},
   "mysql": {},
   "ncloud": {},
