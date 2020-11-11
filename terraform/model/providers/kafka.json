@@ -1,0 +1,167 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v1",
+  "name": "kafka",
+  "type": "provider",
+  "version": "0.2.10",
+  "provider": {
+    "bootstrap_servers": {
+      "Type": "List",
+      "Required": true,
+      "Description": "A list of kafka brokers",
+      "ConfigImplicitMode": "Attr",
+      "Elem": {
+        "Type": "SchemaElements",
+        "ElementsType": "String"
+      }
+    },
+    "ca_cert": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "CA certificate file to validate the server's certificate.",
+      "DefaultFunc": "ENV(KAFKA_CA_CERT)"
+    },
+    "ca_cert_file": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Path to a CA certificate file to validate the server's certificate.",
+      "DefaultFunc": "ENV(KAFKA_CA_CERT)",
+      "Deprecated": "This parameter is now deprecated and will be removed in a later release, please use `ca_cert` instead."
+    },
+    "client_cert": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The client certificate.",
+      "DefaultFunc": "ENV(KAFKA_CLIENT_CERT)"
+    },
+    "client_cert_file": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Path to a file containing the client certificate.",
+      "DefaultFunc": "ENV(KAFKA_CLIENT_CERT)",
+      "Deprecated": "This parameter is now deprecated and will be removed in a later release, please use `client_cert` instead."
+    },
+    "client_key": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The private key that the certificate was issued for.",
+      "DefaultFunc": "ENV(KAFKA_CLIENT_KEY)"
+    },
+    "client_key_file": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Path to a file containing the private key that the certificate was issued for.",
+      "DefaultFunc": "ENV(KAFKA_CLIENT_KEY)",
+      "Deprecated": "This parameter is now deprecated and will be removed in a later release, please use `client_key` instead."
+    },
+    "client_key_passphrase": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The passphrase for the private key that the certificate was issued for.",
+      "DefaultFunc": "ENV(KAFKA_CLIENT_KEY_PASSPHRASE)"
+    },
+    "sasl_mechanism": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "SASL mechanism, can be plain, scram-sha512, scram-sha256",
+      "DefaultFunc": "ENV(KAFKA_SASL_MECHANISM)"
+    },
+    "sasl_password": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Password for SASL authentication.",
+      "DefaultFunc": "ENV(KAFKA_SASL_PASSWORD)"
+    },
+    "sasl_username": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Username for SASL authentication.",
+      "DefaultFunc": "ENV(KAFKA_SASL_USERNAME)"
+    },
+    "skip_tls_verify": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Set this to true only if the target Kafka server is an insecure development instance.",
+      "DefaultFunc": "ENV(KAFKA_SKIP_VERIFY)"
+    },
+    "timeout": {
+      "Type": "Int",
+      "Optional": true,
+      "Description": "Timeout in seconds",
+      "Default": {
+        "Type": "int",
+        "Value": "120"
+      }
+    },
+    "tls_enabled": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Enable communication with the Kafka Cluster over TLS.",
+      "DefaultFunc": "ENV(KAFKA_ENABLE_TLS)"
+    }
+  },
+  "resources": {
+    "kafka_acl": {
+      "acl_host": {
+        "Type": "String",
+        "Required": true
+      },
+      "acl_operation": {
+        "Type": "String",
+        "Required": true
+      },
+      "acl_permission_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "acl_principal": {
+        "Type": "String",
+        "Required": true
+      },
+      "resource_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the resource"
+      },
+      "resource_pattern_type_filter": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Literal"
+        }
+      },
+      "resource_type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "kafka_topic": {
+      "config": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "A map of string k/v attributes.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the topic."
+      },
+      "partitions": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Number of partitions."
+      },
+      "replication_factor": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Number of replicas."
+      }
+    }
+  },
+  "data-sources": {}
+}

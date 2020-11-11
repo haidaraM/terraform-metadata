@@ -132,6 +132,9 @@
   "influxdb": {},
   "infoblox": {},
   "jdcloud": {},
+  "kafka": {
+    "repository": "github.com/Mongey/terraform-provider-__NAME__"
+  },
   "ksyun": {},
   "kubernetes": {},
   "kubernetes-alpha": {
