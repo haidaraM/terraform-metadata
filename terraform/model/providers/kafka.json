@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "kafka",
   "type": "provider",
-  "version": "0.2.10",
+  "version": "v0.2.10",
   "provider": {
     "bootstrap_servers": {
       "Type": "List",
