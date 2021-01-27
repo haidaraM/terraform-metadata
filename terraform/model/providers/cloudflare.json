@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "cloudflare",
   "type": "provider",
-  "version": "v2.8.0",
+  "version": "v2.9.0",
   "provider": {
     "account_id": {
       "Type": "String",
@@ -68,9 +68,84 @@
   },
   "resources": {
     "cloudflare_access_application": {
+      "allowed_idps": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "aud": {
         "Type": "String",
         "Computed": true
+      },
+      "auto_redirect_to_identity": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "cors_headers": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_all_headers": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "allow_all_methods": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "allow_all_origins": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "allow_credentials": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "allowed_headers": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "allowed_methods": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "allowed_origins": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "max_age": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
       },
       "domain": {
         "Type": "String",
@@ -4134,6 +4209,18 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "lookup_type": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "exact"
+              }
+            },
+            "match": {
+              "Type": "String",
+              "Optional": true
+            },
             "name": {
               "Type": "String",
               "Optional": true

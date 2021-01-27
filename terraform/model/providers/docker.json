@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "docker",
   "type": "provider",
-  "version": "v2.7.2",
+  "version": "v2.11.0",
   "provider": {
     "ca_material": {
       "Type": "String",
@@ -201,7 +201,6 @@
       "dns": {
         "Type": "Set",
         "Optional": true,
-        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -211,7 +210,6 @@
       "dns_opts": {
         "Type": "Set",
         "Optional": true,
-        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -244,6 +242,7 @@
       "env": {
         "Type": "Set",
         "Optional": true,
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -273,6 +272,7 @@
         "Type": "List",
         "Optional": true,
         "Description": "A test to perform to check that the container is healthy",
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -356,6 +356,11 @@
         "Type": "String",
         "Required": true
       },
+      "init": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "ip_address": {
         "Type": "String",
         "Computed": true,
@@ -375,6 +380,7 @@
       "labels": {
         "Type": "Set",
         "Optional": true,
+        "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -406,12 +412,14 @@
       "log_driver": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Default": {
+          "Type": "string",
+          "Value": "json-file"
+        }
       },
       "log_opts": {
         "Type": "Map",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "logs": {
         "Type": "Bool",
@@ -596,12 +604,24 @@
               "Type": "String",
               "Computed": true
             },
+            "global_ipv6_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "global_ipv6_prefix_length": {
+              "Type": "Int",
+              "Computed": true
+            },
             "ip_address": {
               "Type": "String",
               "Computed": true
             },
             "ip_prefix_length": {
               "Type": "Int",
+              "Computed": true
+            },
+            "ipv6_gateway": {
+              "Type": "String",
               "Computed": true
             },
             "network_name": {
@@ -713,6 +733,14 @@
           "Value": "false"
         }
       },
+      "remove_volumes": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "restart": {
         "Type": "String",
         "Optional": true,
@@ -727,6 +755,17 @@
         "Default": {
           "Type": "bool",
           "Value": "false"
+        }
+      },
+      "security_opts": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of string values to customize labels for MLS systems, such as SELinux. See https://docs.docker.com/engine/reference/run/#security-configuration",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "shm_size": {
@@ -815,7 +854,6 @@
       "user": {
         "Type": "String",
         "Optional": true,
-        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -859,11 +897,94 @@
       },
       "working_dir": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       }
     },
     "docker_image": {
+      "build": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "pull_triggers",
+          "pull_trigger"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "build_arg": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Set build-time variables",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "dockerfile": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of the Dockerfile (Default is 'PATH/Dockerfile')",
+              "Default": {
+                "Type": "string",
+                "Value": "Dockerfile"
+              }
+            },
+            "force_remove": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Always remove intermediate containers"
+            },
+            "label": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Set metadata for an image",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "no_cache": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Do not use cache when building the image"
+            },
+            "path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Context path"
+            },
+            "remove": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Remove intermediate containers after a successful build (default true)",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "tag": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Name and optionally a tag in the 'name:tag' format",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "target": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Set the target build stage to build"
+            }
+          }
+        }
+      },
       "keep_locally": {
         "Type": "Bool",
         "Optional": true
@@ -875,6 +996,15 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "output": {
+        "Type": "String",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "pull_trigger": {
         "Type": "String",
@@ -988,6 +1118,251 @@
         "Computed": true
       },
       "scope": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "docker_registry_image": {
+      "build": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auth_config": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "auth": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "email": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "host_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "identity_token": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "password": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "registry_token": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "server_address": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "user_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "build_args": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "build_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "cache_from": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "cgroup_parent": {
+              "Type": "String",
+              "Optional": true
+            },
+            "context": {
+              "Type": "String",
+              "Required": true
+            },
+            "cpu_period": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "cpu_quota": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "cpu_set_cpus": {
+              "Type": "String",
+              "Optional": true
+            },
+            "cpu_set_mems": {
+              "Type": "String",
+              "Optional": true
+            },
+            "cpu_shares": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "dockerfile": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "Dockerfile"
+              }
+            },
+            "extra_hosts": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "force_remove": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "isolation": {
+              "Type": "String",
+              "Optional": true
+            },
+            "labels": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "memory": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "memory_swap": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "network_mode": {
+              "Type": "String",
+              "Optional": true
+            },
+            "no_cache": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "platform": {
+              "Type": "String",
+              "Optional": true
+            },
+            "pull_parent": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "remote_context": {
+              "Type": "String",
+              "Optional": true
+            },
+            "remove": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "security_opt": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "session_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "shm_size": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "squash": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "suppress_output": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "target": {
+              "Type": "String",
+              "Optional": true
+            },
+            "ulimit": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "hard": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "soft": {
+                    "Type": "Int",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "version": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "keep_remotely": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "sha256_digest": {
         "Type": "String",
         "Computed": true
       }

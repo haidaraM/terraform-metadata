@@ -514,6 +514,27 @@
               "Type": "Bool",
               "Optional": true
             },
+            "batch": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "job_queue_names": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
             "cluster_name": {
               "Type": "String",
               "Required": true
@@ -1039,7 +1060,10 @@
             "cooldown": {
               "Type": "Int",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "int",
+                "Value": "300"
+              }
             },
             "dimensions": {
               "Type": "List",
@@ -1119,7 +1143,10 @@
             "statistic": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "string",
+                "Value": "average"
+              }
             },
             "target": {
               "Type": "String",
@@ -1131,7 +1158,11 @@
             },
             "unit": {
               "Type": "String",
-              "Required": true
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "percent"
+              }
             }
           }
         }
@@ -1166,7 +1197,10 @@
             "cooldown": {
               "Type": "Int",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "int",
+                "Value": "300"
+              }
             },
             "dimensions": {
               "Type": "List",
@@ -1215,7 +1249,10 @@
             "statistic": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "string",
+                "Value": "average"
+              }
             },
             "target": {
               "Type": "Float",
@@ -1223,7 +1260,11 @@
             },
             "unit": {
               "Type": "String",
-              "Required": true
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "percent"
+              }
             }
           }
         }
@@ -1247,7 +1288,10 @@
             "cooldown": {
               "Type": "Int",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "int",
+                "Value": "300"
+              }
             },
             "dimensions": {
               "Type": "List",
@@ -1327,7 +1371,10 @@
             "statistic": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "string",
+                "Value": "average"
+              }
             },
             "target": {
               "Type": "String",
@@ -1339,7 +1386,11 @@
             },
             "unit": {
               "Type": "String",
-              "Required": true
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "percent"
+              }
             }
           }
         }
@@ -1452,7 +1503,7 @@
         }
       },
       "spot_percentage": {
-        "Type": "Float",
+        "Type": "Int",
         "Optional": true,
         "ConflictsWith": [
           "ondemand_count"
@@ -1857,6 +1908,27 @@
               "Optional": true
             },
             "task_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      }
+    },
+    "spotinst_elastigroup_aws_suspension": {
+      "group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "suspension": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
               "Type": "String",
               "Required": true
             }
@@ -5755,7 +5827,7 @@
         }
       },
       "spot_percentage": {
-        "Type": "Float",
+        "Type": "Int",
         "Optional": true,
         "Default": {
           "Type": "int",
@@ -6451,6 +6523,96 @@
             "num_of_units": {
               "Type": "Int",
               "Required": true
+            }
+          }
+        }
+      },
+      "block_device_mappings": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "device_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "ebs": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "delete_on_termination": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "dynamic_volume_size": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "base_size": {
+                          "Type": "Int",
+                          "Required": true
+                        },
+                        "resource": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "size_per_resource_unit": {
+                          "Type": "Int",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "encrypted": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "iops": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "kms_key_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "snapshot_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "volume_size": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "volume_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "no_device": {
+              "Type": "String",
+              "Optional": true
+            },
+            "virtual_name": {
+              "Type": "String",
+              "Optional": true
             }
           }
         }

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "nsxt",
   "type": "provider",
-  "version": "v2.1.1",
+  "version": "v3.1.0",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
@@ -30,6 +30,12 @@
       "Optional": true,
       "Description": "Enforcement Point for NSXT Policy",
       "DefaultFunc": "ENV(NSXT_POLICY_ENFORCEMENT_POINT)"
+    },
+    "global_manager": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Is this a policy global manager endpoint",
+      "DefaultFunc": "ENV(NSXT_GLOBAL_MANAGER)"
     },
     "host": {
       "Type": "String",
@@ -5772,6 +5778,147 @@
         }
       }
     },
+    "nsxt_policy_bgp_config": {
+      "ecmp": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Flag to enable ECMP",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Flag to enable BGP configuration",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "gateway_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Gateway for this BGP config"
+      },
+      "graceful_restart_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "BGP Graceful Restart Configuration Mode",
+        "Default": {
+          "Type": "string",
+          "Value": "HELPER_ONLY"
+        }
+      },
+      "graceful_restart_stale_route_timer": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "BGP Stale Route Timer",
+        "Default": {
+          "Type": "int",
+          "Value": "600"
+        }
+      },
+      "graceful_restart_timer": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "BGP Graceful Restart Timer",
+        "Default": {
+          "Type": "int",
+          "Value": "180"
+        }
+      },
+      "inter_sr_ibgp": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable inter SR IBGP configuration",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "local_as_num": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "BGP AS number in ASPLAIN/ASDOT Format",
+        "Default": {
+          "Type": "string",
+          "Value": "65000"
+        }
+      },
+      "multipath_relax": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Flag to enable BGP multipath relax option",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "route_aggregation": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of routes to be aggregated",
+        "MaxItems": 1000,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "prefix": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "CIDR of aggregate address"
+            },
+            "summary_only": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Send only summarized route",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            }
+          }
+        }
+      },
+      "site_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Site Path for this BGP config"
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
     "nsxt_policy_bgp_neighbor": {
       "allow_as_in": {
         "Type": "Bool",
@@ -5897,7 +6044,7 @@
       "remote_as_num": {
         "Type": "String",
         "Required": true,
-        "Description": "4 Byte ASN of the neighbor in ASPLAIN Format"
+        "Description": "ASN of the neighbor in ASPLAIN or ASDOT Format"
       },
       "revision": {
         "Type": "Int",
@@ -5974,6 +6121,184 @@
             "tag": {
               "Type": "String",
               "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "nsxt_policy_context_profile": {
+      "app_id": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Description for this resource"
+            },
+            "is_alg_type": {
+              "Type": "Bool",
+              "Description": "Whether the app_id value is ALG type or not",
+              "Computed": true
+            },
+            "sub_attribute": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cifs_smb_version": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "Values for sub attribute key cifs_smb_version",
+                    "MinItems": 1,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "tls_cipher_suite": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "Values for sub attribute key tls_cipher_suite",
+                    "MinItems": 1,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "tls_version": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "Values for sub attribute key tls_version",
+                    "MinItems": 1,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "value": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "Values for attribute key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "domain_name": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Description for this resource"
+            },
+            "value": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "Values for attribute key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "url_category": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Description for this resource"
+            },
+            "value": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "Values for attribute key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             }
           }
         }
@@ -6402,6 +6727,104 @@
         "Computed": true
       }
     },
+    "nsxt_policy_gateway_prefix_list": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "gateway_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy path for Tier0 gateway"
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "prefix": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Ordered list of network prefixes",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Action for the prefix list",
+              "Default": {
+                "Type": "string",
+                "Value": "PERMIT"
+              }
+            },
+            "ge": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Prefix length greater than or equal to",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "le": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Prefix length less than or equal to",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "network": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Network prefix in CIDR format. If not set it will match ANY network"
+            }
+          }
+        }
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
     "nsxt_policy_group": {
       "conjunction": {
         "Type": "List",
@@ -6485,6 +6908,29 @@
                 }
               }
             },
+            "macaddress_expression": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "MAC address expression specifying MAC Address members in the Group",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mac_addresses": {
+                    "Type": "Set",
+                    "Required": true,
+                    "Description": "List of Mac Addresses",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
             "path_expression": {
               "Type": "List",
               "Optional": true,
@@ -6528,6 +6974,46 @@
         "Default": {
           "Type": "string",
           "Value": "default"
+        }
+      },
+      "extended_criteria": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Extended criteria to determine group membership. extended_criteria is implicitly \"AND\" with criteria",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "identity_group": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Identity Group expression",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "distinguished_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "LDAP distinguished name"
+                  },
+                  "domain_base_distinguished_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identity (Directory) domain base distinguished name"
+                  },
+                  "sid": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Identity (Directory) Group SID (security identifier)"
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "nsx_id": {
@@ -8003,6 +8489,40 @@
         "Optional": true,
         "Description": "Policy path to DHCP server or relay configuration to use for subnets configured on this segment"
       },
+      "discovery_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP and MAC discovery profiles for this segment",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "binding_map_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of profile binding map",
+              "Computed": true
+            },
+            "ip_discovery_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated IP Discovery Profile"
+            },
+            "mac_discovery_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated Mac Discovery Profile"
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            }
+          }
+        }
+      },
       "display_name": {
         "Type": "String",
         "Required": true,
@@ -8058,10 +8578,73 @@
         "Description": "Policy path for this resource",
         "Computed": true
       },
+      "qos_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "QoS profiles for this segment",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "binding_map_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of profile binding map",
+              "Computed": true
+            },
+            "qos_profile_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Policy path of associated QoS Profile"
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            }
+          }
+        }
+      },
       "revision": {
         "Type": "Int",
         "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
         "Computed": true
+      },
+      "security_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Security profiles for this segment",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "binding_map_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of profile binding map",
+              "Computed": true
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            },
+            "security_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated Segment Security Profile"
+            },
+            "spoofguard_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated Spoofguard Profile"
+            }
+          }
+        }
       },
       "subnet": {
         "Type": "List",
@@ -8091,9 +8674,6 @@
               "Type": "List",
               "Optional": true,
               "MaxItems": 1,
-              "ConflictsWith": [
-                "subnet.dhcp_v6_config"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -8175,9 +8755,6 @@
               "Type": "List",
               "Optional": true,
               "MaxItems": 1,
-              "ConflictsWith": [
-                "subnet.dhcp_v4_config"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -8703,7 +9280,7 @@
             "local_as_num": {
               "Type": "String",
               "Optional": true,
-              "Description": "\tBGP AS number in ASPLAIN/ASDOT Format",
+              "Description": "BGP AS number in ASPLAIN/ASDOT Format",
               "Default": {
                 "Type": "string",
                 "Value": "65000"
@@ -8805,7 +9382,8 @@
       "edge_cluster_path": {
         "Type": "String",
         "Optional": true,
-        "Description": "The path of the edge cluster connected to this gateway"
+        "Description": "The path of the edge cluster connected to this gateway",
+        "Computed": true
       },
       "enable_firewall": {
         "Type": "Bool",
@@ -8855,6 +9433,41 @@
           "ElementsType": "String"
         }
       },
+      "intersite_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Locale Service for the gateway",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fallback_site_paths": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Fallback sites to be used as new primary site on current primary site failure",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "primary_site_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Primary egress site for gateway"
+            },
+            "transit_subnet": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv4 subnet for inter-site transit segment connecting service routers across sites for stretched gateway. For IPv6 link local subnet is auto configured",
+              "Computed": true
+            }
+          }
+        }
+      },
       "ipv6_dad_profile_path": {
         "Type": "String",
         "Optional": true,
@@ -8867,6 +9480,100 @@
         "Description": "The path of an IPv6 NDRA profile",
         "Computed": true
       },
+      "locale_service": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Locale Service for the gateway",
+        "ConflictsWith": [
+          "edge_cluster_path"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "edge_cluster_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The path of the edge cluster connected to this gateway"
+            },
+            "path": {
+              "Type": "String",
+              "Description": "Policy path for this resource",
+              "Computed": true
+            },
+            "preferred_edge_paths": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Paths of specific edge nodes",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "redistribution_config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Route Redistribution configuration",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Flag to enable route redistribution for BGP",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  },
+                  "rule": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "List of routes to be aggregated",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Rule name"
+                        },
+                        "route_map_path": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Route map to be associated with the redistribution rule"
+                        },
+                        "types": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "List of redistribution types",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            }
+          }
+        }
+      },
       "nsx_id": {
         "Type": "String",
         "Optional": true,
@@ -8877,6 +9584,60 @@
         "Type": "String",
         "Description": "Policy path for this resource",
         "Computed": true
+      },
+      "redistribution_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Route Redistribution configuration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Flag to enable route redistribution for BGP",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "rule": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of routes to be aggregated",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Rule name"
+                  },
+                  "route_map_path": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Route map to be associated with the redistribution rule"
+                  },
+                  "types": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "List of redistribution types",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "revision": {
         "Type": "Int",
@@ -9097,6 +9858,11 @@
         "Optional": true,
         "Description": "Policy path for connected segment"
       },
+      "site_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path of the site the Tier0 edge cluster belongs to"
+      },
       "subnets": {
         "Type": "List",
         "Required": true,
@@ -9174,7 +9940,8 @@
       "edge_cluster_path": {
         "Type": "String",
         "Optional": true,
-        "Description": "The path of the edge cluster connected to this gateway"
+        "Description": "The path of the edge cluster connected to this gateway",
+        "Computed": true
       },
       "egress_qos_profile_path": {
         "Type": "String",
@@ -9222,6 +9989,41 @@
         "Optional": true,
         "Description": "Policy path to gateway QoS profile in ingress direction"
       },
+      "intersite_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Locale Service for the gateway",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fallback_site_paths": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Fallback sites to be used as new primary site on current primary site failure",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "primary_site_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Primary egress site for gateway"
+            },
+            "transit_subnet": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv4 subnet for inter-site transit segment connecting service routers across sites for stretched gateway. For IPv6 link local subnet is auto configured",
+              "Computed": true
+            }
+          }
+        }
+      },
       "ipv6_dad_profile_path": {
         "Type": "String",
         "Optional": true,
@@ -9233,6 +10035,49 @@
         "Optional": true,
         "Description": "The path of an IPv6 NDRA profile",
         "Computed": true
+      },
+      "locale_service": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Locale Service for the gateway",
+        "ConflictsWith": [
+          "edge_cluster_path"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "edge_cluster_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The path of the edge cluster connected to this gateway"
+            },
+            "path": {
+              "Type": "String",
+              "Description": "Policy path for this resource",
+              "Computed": true
+            },
+            "preferred_edge_paths": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Paths of specific edge nodes",
+              "ConflictsWith": [
+                "enable_standby_relocation"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            }
+          }
+        }
       },
       "nsx_id": {
         "Type": "String",
@@ -9403,6 +10248,11 @@
         "Required": true,
         "Description": "Policy path for connected segment"
       },
+      "site_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path of the site the Tier1 edge cluster belongs to"
+      },
       "subnets": {
         "Type": "List",
         "Required": true,
@@ -9500,6 +10350,40 @@
         "Optional": true,
         "Description": "Policy path to DHCP server or relay configuration to use for subnets configured on this segment"
       },
+      "discovery_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP and MAC discovery profiles for this segment",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "binding_map_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of profile binding map",
+              "Computed": true
+            },
+            "ip_discovery_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated IP Discovery Profile"
+            },
+            "mac_discovery_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated Mac Discovery Profile"
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            }
+          }
+        }
+      },
       "display_name": {
         "Type": "String",
         "Required": true,
@@ -9549,10 +10433,73 @@
         "Description": "Policy path for this resource",
         "Computed": true
       },
+      "qos_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "QoS profiles for this segment",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "binding_map_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of profile binding map",
+              "Computed": true
+            },
+            "qos_profile_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Policy path of associated QoS Profile"
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            }
+          }
+        }
+      },
       "revision": {
         "Type": "Int",
         "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
         "Computed": true
+      },
+      "security_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Security profiles for this segment",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "binding_map_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of profile binding map",
+              "Computed": true
+            },
+            "revision": {
+              "Type": "Int",
+              "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+              "Computed": true
+            },
+            "security_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated Segment Security Profile"
+            },
+            "spoofguard_profile_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy path of associated Spoofguard Profile"
+            }
+          }
+        }
       },
       "subnet": {
         "Type": "List",
@@ -9582,9 +10529,6 @@
               "Type": "List",
               "Optional": true,
               "MaxItems": 1,
-              "ConflictsWith": [
-                "subnet.dhcp_v6_config"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -9666,9 +10610,6 @@
               "Type": "List",
               "Optional": true,
               "MaxItems": 1,
-              "ConflictsWith": [
-                "subnet.dhcp_v4_config"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -9794,9 +10735,46 @@
         "Required": true,
         "Description": "Instance id"
       },
+      "port": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Tag specificiation for corresponding segment port",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "segment_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Segment path where VM port should be tagged"
+            },
+            "tag": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Set of opaque identifiers meaningful to the user",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "scope": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "tag": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "tag": {
         "Type": "Set",
-        "Required": true,
+        "Optional": true,
         "Description": "Set of opaque identifiers meaningful to the user",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -10636,6 +11614,31 @@
         "Computed": true
       }
     },
+    "nsxt_policy_context_profile": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display name of this resource",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      }
+    },
     "nsxt_policy_edge_cluster": {
       "description": {
         "Type": "String",
@@ -10659,6 +11662,11 @@
         "Type": "String",
         "Description": "Policy path for this resource",
         "Computed": true
+      },
+      "site_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path of the site this Edge cluster belongs to"
       }
     },
     "nsxt_policy_edge_node": {
@@ -11071,6 +12079,11 @@
         "Description": "The ID of the realized resource",
         "Computed": true
       },
+      "site_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path of the site this resource belongs to"
+      },
       "state": {
         "Type": "String",
         "Description": "The state of the realized resource",
@@ -11126,6 +12139,31 @@
       }
     },
     "nsxt_policy_service": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display name of this resource",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      }
+    },
+    "nsxt_policy_site": {
       "description": {
         "Type": "String",
         "Optional": true,
@@ -11266,6 +12304,11 @@
         "Type": "String",
         "Description": "Policy path for this resource",
         "Computed": true
+      },
+      "site_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path of the site this Transport Zone belongs to"
       },
       "transport_type": {
         "Type": "String",

@@ -58,8 +58,8 @@
     "infoblox_a_record": {
       "cidr": {
         "Type": "String",
-        "Required": true,
-        "Description": "The address in cidr format."
+        "Optional": true,
+        "Description": "The network to allocate IP address when the ip_addr field is empty. Network address in cidr format."
       },
       "dns_view": {
         "Type": "String",
@@ -73,16 +73,7 @@
       "ip_addr": {
         "Type": "String",
         "Required": true,
-        "Description": "IP address your instance in cloud.For static allocation ,set this field with valid IP. For dynamic allocation, leave this field empty."
-      },
-      "network_view_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Network view name available in Nios server.",
-        "Default": {
-          "Type": "string",
-          "Value": "default"
-        }
+        "Description": "IP address your instance in cloud. For static allocation, set the field with valid IP. For dynamic allocation, leave this field empty and set the cidr field."
       },
       "tenant_id": {
         "Type": "String",
@@ -254,10 +245,20 @@
       }
     },
     "infoblox_network": {
+      "allocate_prefix_len": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Set parameter value\u003e0 to allocate next available network with prefix=value from network container defined by parent_cidr.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "cidr": {
         "Type": "String",
-        "Required": true,
-        "Description": "The network block in cidr format."
+        "Optional": true,
+        "Description": "The network block in cidr format.",
+        "Computed": true
       },
       "gateway": {
         "Type": "String",
@@ -278,6 +279,11 @@
           "Type": "string",
           "Value": "default"
         }
+      },
+      "parent_cidr": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The parent network container block in cidr format to allocate from."
       },
       "reserve_ip": {
         "Type": "Int",
@@ -309,8 +315,8 @@
     "infoblox_ptr_record": {
       "cidr": {
         "Type": "String",
-        "Required": true,
-        "Description": "The address in cidr format."
+        "Optional": true,
+        "Description": "The network to allocate IP address when the ip_addr field is empty. Network address in cidr format."
       },
       "dns_view": {
         "Type": "String",
@@ -324,16 +330,7 @@
       "ip_addr": {
         "Type": "String",
         "Required": true,
-        "Description": "IP address your instance in cloud.For static allocation ,set the field with valid IP. For dynamic allocation, leave this field empty."
-      },
-      "network_view_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Network view name available in Nios server.",
-        "Default": {
-          "Type": "string",
-          "Value": "default"
-        }
+        "Description": "IP address your instance in cloud. For static allocation, set the field with valid IP. For dynamic allocation, leave this field empty and set the cidr field."
       },
       "tenant_id": {
         "Type": "String",
@@ -358,6 +355,94 @@
     }
   },
   "data-sources": {
+    "infoblox_a_record": {
+      "dns_view": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Dns View under which the zone has been created.",
+        "Computed": true
+      },
+      "eas": {
+        "Type": "Map",
+        "Description": "Extension attributes",
+        "Computed": true
+      },
+      "first_record": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Return first found record. Raise error if set to false and more than one record found.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "fqdn": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A record FQDN.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ip_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP address.",
+        "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Zone under which record has been created.",
+        "Computed": true
+      }
+    },
+    "infoblox_cname_record": {
+      "canonical": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Canonical name.",
+        "Computed": true
+      },
+      "dns_view": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Dns View under which the zone has been created.",
+        "Computed": true
+      },
+      "eas": {
+        "Type": "Map",
+        "Description": "Extension attributes",
+        "Computed": true
+      },
+      "first_record": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Return first found record. Raise error if set to false and more than one record found.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "fqdn": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A record FQDN.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Zone under which record has been created.",
+        "Computed": true
+      }
+    },
     "infoblox_network": {
       "cidr": {
         "Type": "String",

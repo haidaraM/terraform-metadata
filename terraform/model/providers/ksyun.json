@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "ksyun",
   "type": "provider",
-  "version": "v1.0.1",
+  "version": "v1.1.0",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -262,32 +262,36 @@
         "Optional": true,
         "Computed": true
       },
-      "data_disk": {
+      "data_disk_gb": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "data_disks": {
         "Type": "List",
-        "Optional": true,
+        "Computed": true,
         "IsBlock": true,
-        "ConfigImplicitMode": "Block",
+        "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
             "delete_with_instance": {
               "Type": "Bool",
-              "Optional": true
+              "Computed": true
             },
-            "size": {
-              "Type": "Int",
-              "Optional": true
-            },
-            "type": {
+            "disk_id": {
               "Type": "String",
-              "Optional": true
+              "Computed": true
+            },
+            "disk_size": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "disk_type": {
+              "Type": "String",
+              "Computed": true
             }
           }
         }
-      },
-      "data_disk_gb": {
-        "Type": "Int",
-        "Optional": true
       },
       "data_guard_id": {
         "Type": "String",
@@ -457,6 +461,10 @@
         "Optional": true,
         "Computed": true
       },
+      "public_ip": {
+        "Type": "String",
+        "Computed": true
+      },
       "purchase_time": {
         "Type": "Int",
         "Optional": true
@@ -538,7 +546,8 @@
       "db_instance_identifier": {
         "Type": "String",
         "Optional": true,
-        "Description": "source instance identifier"
+        "Description": "source instance identifier",
+        "Computed": true
       },
       "db_instance_name": {
         "Type": "String",
@@ -549,7 +558,21 @@
         "Required": true,
         "Description": "HRDS"
       },
+      "db_parameter_group_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "proprietary db parameter group id for mysql",
+        "Computed": true
+      },
       "duration": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "eip": {
+        "Type": "String",
+        "Optional": true
+      },
+      "eip_port": {
         "Type": "Int",
         "Optional": true
       },
@@ -563,330 +586,14 @@
         "Required": true,
         "Description": "db engine version only support 5.5|5.6|5.7|8.0"
       },
-      "krds": {
-        "Type": "List",
+      "instance_create_time": {
+        "Type": "String",
         "Optional": true,
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "audit": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "datastore_version_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_class": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "disk": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "iops": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "max_conn": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "mem": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "ram": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vcpus": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "db_instance_identifier": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_status": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_parameter_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_source": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_type": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "point_in_time": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "disk_used": {
-              "Type": "Float",
-              "Optional": true,
-              "Computed": true
-            },
-            "eip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "eip_port": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "engine": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "engine_version": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "instance_create_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "master_availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "master_user_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "multi_availability_zone": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_source": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_use": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "port": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "preferred_backup_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_what": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "publicly_accessible": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "read_replica_db_instance_identifiers": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "read_replica_db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vip": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "region": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "rip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "security_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "service_end_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "service_start_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "slave_availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "sub_order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "subnet_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "vip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "vpc_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            }
-          }
-        }
+        "Computed": true
+      },
+      "instance_has_eip": {
+        "Type": "Bool",
+        "Optional": true
       },
       "master_user_name": {
         "Type": "String",
@@ -895,10 +602,6 @@
       "master_user_password": {
         "Type": "String",
         "Required": true
-      },
-      "output_file": {
-        "Type": "String",
-        "Optional": true
       },
       "parameters": {
         "Type": "Set",
@@ -921,8 +624,9 @@
         }
       },
       "port": {
-        "Type": "String",
-        "Optional": true
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
       },
       "preferred_backup_time": {
         "Type": "String",
@@ -932,10 +636,20 @@
         "Type": "Int",
         "Optional": true
       },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "security_group_id": {
         "Type": "String",
         "Optional": true,
         "Description": "proprietary security group id for krds"
+      },
+      "sub_order_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "subnet_id": {
         "Type": "String",
@@ -968,345 +682,28 @@
       "db_instance_identifier": {
         "Type": "String",
         "Optional": true,
-        "Description": "source instance identifier"
+        "Description": "instance identifier",
+        "Computed": true
       },
       "db_instance_name": {
         "Type": "String",
         "Required": true
+      },
+      "db_parameter_group_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "proprietary db parameter group id for mysql",
+        "Computed": true
       },
       "duration": {
         "Type": "Int",
         "Optional": true,
         "Description": "duration unit is month"
       },
-      "krds": {
-        "Type": "List",
-        "Optional": true,
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "audit": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "datastore_version_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_class": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "disk": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "iops": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "max_conn": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "mem": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "ram": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vcpus": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "db_instance_identifier": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_status": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_parameter_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_source": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_type": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "point_in_time": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "disk_used": {
-              "Type": "Float",
-              "Optional": true,
-              "Computed": true
-            },
-            "eip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "eip_port": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "engine": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "engine_version": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "instance_create_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "master_availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "master_user_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "multi_availability_zone": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_source": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_use": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "port": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "preferred_backup_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_what": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "publicly_accessible": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "read_replica_db_instance_identifiers": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "read_replica_db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vip": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "region": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "rip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "security_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "service_end_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "service_start_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "slave_availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "sub_order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "subnet_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "vip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "vpc_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            }
-          }
-        }
-      },
-      "output_file": {
+      "instance_create_time": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "parameters": {
         "Type": "Set",
@@ -1328,14 +725,34 @@
           }
         }
       },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "project_id": {
         "Type": "Int",
         "Optional": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "security_group_id": {
         "Type": "String",
         "Optional": true,
         "Description": "proprietary security group id for mysql"
+      },
+      "source_db_instance_identifier": {
+        "Type": "String",
+        "Required": true,
+        "Description": "source instance identifier"
+      },
+      "sub_order_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "ksyun_krds_security_group": {
@@ -1344,9 +761,10 @@
         "update",
         "delete"
       ],
-      "output_file": {
+      "created": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Computed": true
       },
       "security_group_description": {
         "Type": "String",
@@ -1354,7 +772,8 @@
       },
       "security_group_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "security_group_name": {
         "Type": "String",
@@ -1368,6 +787,16 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "created": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "security_group_rule_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "security_group_rule_name": {
               "Type": "String",
               "Required": true
@@ -1375,107 +804,6 @@
             "security_group_rule_protocol": {
               "Type": "String",
               "Required": true
-            }
-          }
-        }
-      },
-      "security_groups": {
-        "Type": "List",
-        "Optional": true,
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "created": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "instances": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "created": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_type": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vip": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "security_group_description": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "security_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "security_group_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "security_group_rules": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "created": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "security_group_rule_id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "security_group_rule_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "security_group_rule_protocol": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
             }
           }
         }
@@ -1612,6 +940,56 @@
       "rule_number": {
         "Type": "Int",
         "Optional": true
+      }
+    },
+    "ksyun_lb_backend_server_group": {
+      "backend_server_group_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "backend_server_group_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "backend_server_group_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "backend_server_number": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "create_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "ksyun_lb_host_header": {
+      "certificate_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "create_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "host_header": {
+        "Type": "String",
+        "Required": true
+      },
+      "host_header_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "listener_id": {
+        "Type": "String",
+        "Required": true
       }
     },
     "ksyun_lb_listener": {
@@ -1781,15 +1159,6 @@
             }
           }
         }
-      },
-      "session_persistence_period": {
-        "Type": "String",
-        "Optional": true
-      },
-      "session_state": {
-        "Type": "String",
-        "Optional": true,
-        "Computed": true
       }
     },
     "ksyun_lb_listener_associate_acl": {
@@ -1835,8 +1204,180 @@
         "Type": "Int",
         "Optional": true,
         "Default": {
-          "Type": "string",
+          "Type": "int",
           "Value": "1"
+        }
+      }
+    },
+    "ksyun_lb_register_backend_server": {
+      "backend_server_group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "backend_server_ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "backend_server_port": {
+        "Type": "String",
+        "Required": true
+      },
+      "create_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "instance_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "network_interface_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "real_server_ip": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "real_server_port": {
+        "Type": "String",
+        "Computed": true
+      },
+      "real_server_state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "real_server_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "register_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "weight": {
+        "Type": "Float",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "ksyun_lb_rule": {
+      "backend_server_group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "create_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "health_check": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "health_check_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "health_check_state": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "healthy_threshold": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "host_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "listener_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "unhealthy_threshold": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "url_path": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "host_header_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "listener_sync": {
+        "Type": "String",
+        "Required": true
+      },
+      "method": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Required": true
+      },
+      "rule_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "session": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cookie_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "cookie_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "session_persistence_period": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "session_state": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
         }
       }
     },
@@ -2407,7 +1948,7 @@
       },
       "security_group_id": {
         "Type": "String",
-        "Computed": true
+        "Required": true
       },
       "service_begin_time": {
         "Type": "String",
@@ -2516,14 +2057,43 @@
         "Computed": true
       }
     },
-    "ksyun_redis_sec_rule": {
+    "ksyun_redis_sec_group": {
       "available_zone": {
         "Type": "String",
         "Optional": true
       },
-      "cache_id": {
+      "description": {
         "Type": "String",
         "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "ksyun_redis_sec_group_allocate": {
+      "available_zone": {
+        "Type": "String",
+        "Optional": true
+      },
+      "cache_ids": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "security_group_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "ksyun_redis_sec_group_rule": {
+      "available_zone": {
+        "Type": "String",
+        "Optional": true
       },
       "rules": {
         "Type": "Set",
@@ -2533,6 +2103,10 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "security_group_id": {
+        "Type": "String",
+        "Required": true
       }
     },
     "ksyun_security_group": {
@@ -2621,12 +2195,18 @@
       "icmp_code": {
         "Type": "Int",
         "Optional": true,
-        "Computed": true
+        "Default": {
+          "Type": "int",
+          "Value": "-2"
+        }
       },
       "icmp_type": {
         "Type": "Int",
         "Optional": true,
-        "Computed": true
+        "Default": {
+          "Type": "int",
+          "Value": "-2"
+        }
       },
       "port_range_from": {
         "Type": "Int",
@@ -2677,7 +2257,8 @@
       "db_instance_identifier": {
         "Type": "String",
         "Optional": true,
-        "Description": "source instance identifier"
+        "Description": "source instance identifier",
+        "Computed": true
       },
       "db_instance_name": {
         "Type": "String",
@@ -2702,6 +2283,11 @@
         "Required": true,
         "Description": "db engine version only support 2008r2,2012,2016"
       },
+      "instance_create_time": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "master_user_name": {
         "Type": "String",
         "Required": true
@@ -2710,13 +2296,10 @@
         "Type": "String",
         "Required": true
       },
-      "output_file": {
-        "Type": "String",
-        "Optional": true
-      },
       "port": {
-        "Type": "String",
-        "Optional": true
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
       },
       "preferred_backup_time": {
         "Type": "String",
@@ -2726,335 +2309,20 @@
         "Type": "Int",
         "Optional": true
       },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "security_group_id": {
         "Type": "String",
         "Optional": true,
         "Description": "proprietary security group id for krds"
       },
-      "sqlservers": {
-        "Type": "List",
+      "sub_order_id": {
+        "Type": "String",
         "Optional": true,
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "audit": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "datastore_version_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_class": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "disk": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "iops": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "max_conn": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "mem": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "ram": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vcpus": {
-                    "Type": "Int",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "db_instance_identifier": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_status": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_instance_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_parameter_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_source": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_type": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "point_in_time": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "disk_used": {
-              "Type": "Float",
-              "Optional": true,
-              "Computed": true
-            },
-            "eip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "eip_port": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "engine": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "engine_version": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "instance_create_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "master_availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "master_user_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "multi_availability_zone": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_source": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_use": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "port": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "preferred_backup_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_what": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "publicly_accessible": {
-              "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "read_replica_db_instance_identifiers": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "read_replica_db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vip": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "region": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "rip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "security_group_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "service_end_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "service_start_time": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "slave_availability_zone": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "sub_order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "subnet_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "vip": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "vpc_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            }
-          }
-        }
+        "Computed": true
       },
       "subnet_id": {
         "Type": "String",
@@ -3772,6 +3040,33 @@
               "Type": "String",
               "Computed": true
             },
+            "data_disks": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "delete_with_instance": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "disk_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "disk_size": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "disk_type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "image_id": {
               "Type": "String",
               "Computed": true
@@ -3922,6 +3217,10 @@
                     "Type": "String",
                     "Computed": true
                   },
+                  "public_ip": {
+                    "Type": "String",
+                    "Computed": true
+                  },
                   "security_group_set": {
                     "Type": "List",
                     "Computed": true,
@@ -4052,6 +3351,10 @@
           "ElementsType": "String"
         }
       },
+      "search": {
+        "Type": "String",
+        "Optional": true
+      },
       "subnet_id": {
         "Type": "Set",
         "Optional": true,
@@ -4112,8 +3415,7 @@
           "Info": {
             "audit": {
               "Type": "Bool",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "availability_zone": {
               "Type": "String",
@@ -4122,18 +3424,7 @@
             },
             "bill_type": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "bill_type_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "datastore_version_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "db_instance_class": {
               "Type": "Set",
@@ -4185,243 +3476,115 @@
             },
             "db_instance_identifier": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "db_instance_name": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             },
             "db_instance_status": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "db_instance_type": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             },
             "db_parameter_group_id": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "db_source": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "db_instance_type": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "point_in_time": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
+              "Optional": true
             },
             "disk_used": {
               "Type": "Float",
-              "Optional": true,
               "Computed": true
             },
             "eip": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "eip_port": {
-              "Type": "Int",
-              "Optional": true,
+              "Type": "String",
               "Computed": true
             },
             "engine": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "engine_version": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "group_id": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "instance_create_time": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "master_availability_zone": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "master_user_name": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             },
             "multi_availability_zone": {
               "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_source": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_type": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "order_use": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "port": {
               "Type": "Int",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "preferred_backup_time": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "product_id": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "product_what": {
-              "Type": "Int",
-              "Optional": true,
               "Computed": true
             },
             "project_id": {
               "Type": "Int",
-              "Optional": true,
-              "Computed": true
-            },
-            "project_name": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "publicly_accessible": {
               "Type": "Bool",
-              "Optional": true,
-              "Computed": true
-            },
-            "read_replica_db_instance_identifiers": {
-              "Type": "Set",
-              "Optional": true,
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "id": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "read_replica_db_instance_identifier": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "vip": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  }
-                }
-              }
+              "Optional": true
             },
             "region": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "rip": {
-              "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "security_group_id": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "service_end_time": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "service_start_time": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "slave_availability_zone": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "sub_order_id": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Optional": true
             },
             "subnet_id": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             },
             "vip": {
               "Type": "String",
-              "Optional": true,
               "Computed": true
             },
             "vpc_id": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             }
           }
         }
@@ -4649,6 +3812,167 @@
         "Computed": true
       }
     },
+    "ksyun_lb_backend_server_groups": {
+      "backend_server_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backend_server_group_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "backend_server_group_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "backend_server_group_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "backend_server_number": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "health_check": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "health_check_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "health_check_state": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "healthy_threshold": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "host_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "interval": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "listener_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "timeout": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "unhealthy_threshold": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "url_path": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "vpc_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ids": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "total_count": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "ksyun_lb_host_headers": {
+      "host_headers": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "certificate_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "host_header": {
+              "Type": "String",
+              "Computed": true
+            },
+            "host_header_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "listener_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ids": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "listener_id": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "total_count": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
     "ksyun_lb_listener_servers": {
       "ids": {
         "Type": "Set",
@@ -4725,6 +4049,232 @@
         "Computed": true
       }
     },
+    "ksyun_lb_register_backend_servers": {
+      "backend_server_group_id": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ids": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "register_backend_servers": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backend_server_group_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "backend_server_ip": {
+              "Type": "String",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "instance_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "network_interface_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "real_server_ip": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "real_server_port": {
+              "Type": "String",
+              "Computed": true
+            },
+            "real_server_state": {
+              "Type": "String",
+              "Computed": true
+            },
+            "real_server_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "register_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "weight": {
+              "Type": "Float",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "total_count": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "ksyun_lb_rules": {
+      "host_header_id": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ids": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "lb_rules": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backend_server_group_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "String",
+              "Computed": true
+            },
+            "health_check": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "health_check_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "health_check_state": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "healthy_threshold": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "host_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "interval": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "listener_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "timeout": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "unhealthy_threshold": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "url_path": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "host_header_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "listener_sync": {
+              "Type": "String",
+              "Computed": true
+            },
+            "method": {
+              "Type": "String",
+              "Computed": true
+            },
+            "path": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rule_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "session": {
+              "Type": "List",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cookie_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "cookie_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "session_persistence_period": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "session_state": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "total_count": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
     "ksyun_lbs": {
       "ids": {
         "Type": "Set",
@@ -4781,6 +4331,10 @@
             }
           }
         }
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true
       },
       "output_file": {
         "Type": "String",
@@ -5548,29 +5102,6 @@
               "Type": "String",
               "Computed": true
             },
-            "rules": {
-              "Type": "List",
-              "Required": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "cidr": {
-                    "Type": "String",
-                    "Computed": true
-                  },
-                  "security_rule_id": {
-                    "Type": "Float",
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "security_group_id": {
-              "Type": "String",
-              "Computed": true
-            },
             "service_begin_time": {
               "Type": "String",
               "Computed": true
@@ -5633,6 +5164,47 @@
       "vpc_id": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "ksyun_redis_security_groups": {
+      "instances": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "security_group_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "updated": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "total_count": {
+        "Type": "Int",
+        "Computed": true
       }
     },
     "ksyun_security_groups": {
@@ -5797,6 +5369,10 @@
             }
           }
         }
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true
       },
       "output_file": {
         "Type": "String",

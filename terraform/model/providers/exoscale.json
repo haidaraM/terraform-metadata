@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "exoscale",
   "type": "provider",
-  "version": "v0.17.1",
+  "version": "v0.18.0",
   "provider": {
     "compute_endpoint": {
       "Type": "String",
@@ -204,6 +204,10 @@
       "password": {
         "Type": "String",
         "Computed": true
+      },
+      "reverse_dns": {
+        "Type": "String",
+        "Optional": true
       },
       "security_group_ids": {
         "Type": "Set",
@@ -1050,6 +1054,24 @@
     }
   },
   "data-sources": {
+    "exoscale_affinity": {
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of the Affinity Group",
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the Affinity Group",
+        "ConflictsWith": [
+          "id"
+        ]
+      }
+    },
     "exoscale_compute": {
       "cpu": {
         "Type": "Int",
@@ -1332,6 +1354,63 @@
             }
           }
         }
+      }
+    },
+    "exoscale_network": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "end_ip": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of the network",
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the network",
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "netmask": {
+        "Type": "String",
+        "Computed": true
+      },
+      "start_ip": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the zone"
+      }
+    },
+    "exoscale_security_group": {
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of the Security Group",
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the Security Group",
+        "ConflictsWith": [
+          "id"
+        ]
       }
     }
   }

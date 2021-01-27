@@ -1893,6 +1893,9 @@
       }
     },
     "digitalocean_vpc": {
+      "__timeouts__": [
+        "delete"
+      ],
       "created_at": {
         "Type": "String",
         "Description": "The date and time of when the VPC was created",

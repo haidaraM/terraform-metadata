@@ -61,6 +61,7 @@
       "account_manage_plan": {
         "Type": "Bool",
         "Optional": true,
+        "Deprecated": "obsolete, should no longer be used",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -556,6 +557,7 @@
       "account_manage_plan": {
         "Type": "Bool",
         "Optional": true,
+        "Deprecated": "obsolete, should no longer be used",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -788,6 +790,7 @@
       "account_manage_plan": {
         "Type": "Bool",
         "Optional": true,
+        "Deprecated": "obsolete, should no longer be used",
         "Default": {
           "Type": "bool",
           "Value": "false"

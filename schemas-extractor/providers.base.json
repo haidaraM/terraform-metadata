@@ -42,6 +42,15 @@
   "template": {
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
+  "fakewebservices": {
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+  },
+  "hcs": {
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+  },
+  "scaffolding-goreleaser": {
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+  },
   "terraform": {
     "skip_generation": true,
     "pkg_name": "builtin/providers/__NAME__",

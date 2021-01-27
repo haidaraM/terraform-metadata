@@ -139,6 +139,22 @@
       }
     },
     "github_branch_protection": {
+      "allows_deletions": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "allows_force_pushes": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "enforce_admins": {
         "Type": "Bool",
         "Optional": true,
@@ -634,7 +650,7 @@
       "branch": {
         "Type": "String",
         "Optional": true,
-        "Description": "The branch name, defaults to \"master\"",
+        "Description": "The branch name, defaults to \"main\"",
         "Default": {
           "Type": "string",
           "Value": "main"
@@ -656,6 +672,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "The commit message when creating or updating the file",
+        "Computed": true
+      },
+      "commit_sha": {
+        "Type": "String",
+        "Description": "The SHA of the commit that modified the file",
         "Computed": true
       },
       "content": {

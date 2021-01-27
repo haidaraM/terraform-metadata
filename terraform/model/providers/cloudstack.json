@@ -81,6 +81,35 @@
         "Required": true
       }
     },
+    "cloudstack_autoscale_vm_profile": {
+      "destroy_vm_grace_period": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
+      "other_deploy_params": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
+      "service_offering": {
+        "Type": "String",
+        "Required": true
+      },
+      "template": {
+        "Type": "String",
+        "Required": true
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "cloudstack_disk": {
       "attach": {
         "Type": "Bool",
@@ -118,6 +147,11 @@
       },
       "size": {
         "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
         "Optional": true,
         "Computed": true
       },
@@ -376,6 +410,11 @@
           "Value": "true"
         }
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
       "template": {
         "Type": "String",
         "Required": true
@@ -408,6 +447,11 @@
       },
       "project": {
         "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
         "Optional": true,
         "Computed": true
       },
@@ -530,6 +574,11 @@
       },
       "startip": {
         "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
         "Optional": true,
         "Computed": true
       },
@@ -986,6 +1035,11 @@
         "Optional": true,
         "Computed": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
       "url": {
         "Type": "String",
         "Required": true
@@ -1151,6 +1205,11 @@
       },
       "size": {
         "Type": "String",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
         "Computed": true
       },
       "template_filter": {

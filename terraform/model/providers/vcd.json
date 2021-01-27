@@ -3797,6 +3797,15 @@
               "Description": "Network card adapter type. (e.g. 'E1000', 'E1000E', 'SRIOVETHERNETCARD', 'VMXNET3', 'PCNet32')",
               "Computed": true
             },
+            "connected": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "It defines if NIC is connected or not.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
             "ip": {
               "Type": "String",
               "Optional": true,
@@ -6835,6 +6844,15 @@
               "Type": "String",
               "Description": "Network card adapter type. (e.g. 'E1000', 'E1000E', 'SRIOVETHERNETCARD', 'VMXNET3', 'PCNet32')",
               "Computed": true
+            },
+            "connected": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "It defines if NIC is connected or not.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
             },
             "ip": {
               "Type": "String",

@@ -86,6 +86,50 @@
         }
       }
     },
+    "bitbucket_deployment": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "stage": {
+        "Type": "String",
+        "Required": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "bitbucket_deployment_variable": {
+      "deployment": {
+        "Type": "String",
+        "Required": true
+      },
+      "key": {
+        "Type": "String",
+        "Required": true
+      },
+      "secured": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "uuid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "value": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "bitbucket_hook": {
       "active": {
         "Type": "Bool",
@@ -260,7 +304,7 @@
         "Optional": true,
         "Default": {
           "Type": "bool",
-          "Value": "true"
+          "Value": "false"
         }
       },
       "uuid": {

@@ -41,7 +41,7 @@
       "Description": "Rancher connection retries",
       "Default": {
         "Type": "int",
-        "Value": "5"
+        "Value": "10"
       }
     },
     "secret_key": {
@@ -141,6 +141,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "values.yaml base64 encoded file content of the app"
+      },
+      "wait": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until app is deployed and active",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       }
     },
     "rancher2_auth_config_activedirectory": {
@@ -2199,9 +2208,9 @@
       },
       "enable_cluster_istio": {
         "Type": "Bool",
-        "Optional": true,
         "Description": "Enable built-in cluster istio",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Deploy istio using rancher2_app resource instead"
       },
       "enable_cluster_monitoring": {
         "Type": "Bool",
@@ -2615,6 +2624,11 @@
             }
           }
         }
+      },
+      "istio_enabled": {
+        "Type": "Bool",
+        "Description": "Is istio enabled at cluster?",
+        "Computed": true
       },
       "k3s_config": {
         "Type": "List",

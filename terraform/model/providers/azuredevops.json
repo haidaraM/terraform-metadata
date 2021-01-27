@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "azuredevops",
   "type": "provider",
-  "version": "v0.0.1",
+  "version": "v0.1.0",
   "provider": {
     "org_service_url": {
       "Type": "String",
@@ -51,6 +51,133 @@
         "Required": true
       }
     },
+    "azuredevops_area_permissions": {
+      "path": {
+        "Type": "String",
+        "Optional": true
+      },
+      "permissions": {
+        "Type": "Map",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "principal": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "replace": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      }
+    },
+    "azuredevops_branch_policy_auto_reviewers": {
+      "blocking": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "settings": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auto_reviewer_ids": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "path_filters": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "scope": {
+              "Type": "List",
+              "Required": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "Exact"
+                    }
+                  },
+                  "repository_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "repository_ref": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "submitter_can_vote": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    },
     "azuredevops_branch_policy_build_validation": {
       "blocking": {
         "Type": "Bool",
@@ -89,6 +216,15 @@
             "display_name": {
               "Type": "String",
               "Required": true
+            },
+            "filename_patterns": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "manual_queue_only": {
               "Type": "Bool",
@@ -140,6 +276,69 @@
               "Default": {
                 "Type": "int",
                 "Value": "720"
+              }
+            }
+          }
+        }
+      }
+    },
+    "azuredevops_branch_policy_comment_resolution": {
+      "blocking": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "settings": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "List",
+              "Required": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "Exact"
+                    }
+                  },
+                  "repository_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "repository_ref": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
               }
             }
           }
@@ -221,14 +420,73 @@
         }
       }
     },
+    "azuredevops_branch_policy_work_item_linking": {
+      "blocking": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "settings": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "List",
+              "Required": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "Exact"
+                    }
+                  },
+                  "repository_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "repository_ref": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "azuredevops_build_definition": {
       "agent_pool_name": {
         "Type": "String",
-        "Optional": true,
-        "Default": {
-          "Type": "string",
-          "Value": "Hosted Ubuntu 1604"
-        }
+        "Optional": true
       },
       "ci_trigger": {
         "Type": "List",
@@ -524,6 +782,13 @@
                 "Value": "master"
               }
             },
+            "github_enterprise_url": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            },
             "repo_id": {
               "Type": "String",
               "Required": true
@@ -531,6 +796,14 @@
             "repo_type": {
               "Type": "String",
               "Required": true
+            },
+            "report_build_status": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
             },
             "service_connection_id": {
               "Type": "String",
@@ -606,6 +879,41 @@
         }
       }
     },
+    "azuredevops_git_permissions": {
+      "branch_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "permissions": {
+        "Type": "Map",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "principal": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "replace": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "repository_id": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "azuredevops_git_repository": {
       "default_branch": {
         "Type": "String",
@@ -614,7 +922,7 @@
       },
       "initialization": {
         "Type": "Set",
-        "Optional": true,
+        "Required": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -629,7 +937,8 @@
               "Type": "String",
               "Optional": true,
               "Default": {
-                "Type": "string"
+                "Type": "string",
+                "Value": "Git"
               }
             },
             "source_url": {
@@ -775,6 +1084,40 @@
         }
       }
     },
+    "azuredevops_iteration_permissions": {
+      "path": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "permissions": {
+        "Type": "Map",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "principal": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "replace": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      }
+    },
     "azuredevops_project": {
       "description": {
         "Type": "String",
@@ -840,11 +1183,43 @@
         "Required": true
       }
     },
+    "azuredevops_project_permissions": {
+      "permissions": {
+        "Type": "Map",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "principal": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "replace": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      }
+    },
     "azuredevops_resource_authorization": {
       "authorized": {
         "Type": "Bool",
         "Required": true,
         "Description": "indicates whether the resource is authorized for use"
+      },
+      "definition_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "id of the build definition"
       },
       "project_id": {
         "Type": "String",
@@ -852,7 +1227,7 @@
       },
       "resource_id": {
         "Type": "String",
-        "Optional": true,
+        "Required": true,
         "Description": "id of the resource"
       },
       "type": {
@@ -863,6 +1238,137 @@
           "Type": "string",
           "Value": "endpoint"
         }
+      }
+    },
+    "azuredevops_serviceendpoint_aws": {
+      "access_key_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AWS access key ID for signing programmatic requests.",
+        "DefaultFunc": "ENV(AZDO_AWS_SERVICE_CONNECTION_ACCESS_KEY_ID)"
+      },
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "external_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A unique identifier that is used by third parties when assuming roles in their customers' accounts, aka cross-account role access.",
+        "DefaultFunc": "ENV(AZDO_AWS_SERVICE_CONNECTION_EXTERNAL_ID)"
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "role_session_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optional identifier for the assumed role session.",
+        "DefaultFunc": "ENV(AZDO_AWS_SERVICE_CONNECTION_RSN)"
+      },
+      "role_to_assume": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Amazon Resource Name (ARN) of the role to assume.",
+        "DefaultFunc": "ENV(AZDO_AWS_SERVICE_CONNECTION_RTA)"
+      },
+      "secret_access_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AWS secret access key for signing programmatic requests.",
+        "DefaultFunc": "ENV(AZDO_AWS_SERVICE_CONNECTION_SECRET_ACCESS_KEY)"
+      },
+      "secret_access_key_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'secret_access_key'",
+        "Computed": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "session_token": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The AWS session token for signing programmatic requests.",
+        "DefaultFunc": "ENV(AZDO_AWS_SERVICE_CONNECTION_SESSION_TOKEN)"
+      },
+      "session_token_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'session_token'",
+        "Computed": true
+      }
+    },
+    "azuredevops_serviceendpoint_azurecr": {
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "azurecr_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AzureContainerRegistry registry which should be used.",
+        "DefaultFunc": "ENV(AZDO_AZURECR_SERVICE_CONNECTION_REGISTRY)"
+      },
+      "azurecr_spn_tenantid": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The service principal tenant id which should be used.",
+        "DefaultFunc": "ENV(ACR_TENANT_ID)"
+      },
+      "azurecr_subscription_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Azure subscription Id which should be used.",
+        "DefaultFunc": "ENV(ACR_SUBSCRIPTION_ID)"
+      },
+      "azurecr_subscription_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Azure subscription name which should be used.",
+        "DefaultFunc": "ENV(ACR_SUBSCRIPTION_NAME)"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "resource_group": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Scope Resource Group"
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
       }
     },
     "azuredevops_serviceendpoint_azurerm": {
@@ -1445,6 +1951,37 @@
           }
         }
       }
+    },
+    "azuredevops_workitemquery_permissions": {
+      "path": {
+        "Type": "String",
+        "Optional": true
+      },
+      "permissions": {
+        "Type": "Map",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "principal": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "replace": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      }
     }
   },
   "data-sources": {
@@ -1489,6 +2026,64 @@
             }
           }
         }
+      }
+    },
+    "azuredevops_area": {
+      "children": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "has_children": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "path": {
+              "Type": "String",
+              "Computed": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "fetch_children": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "has_children": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
       }
     },
     "azuredevops_client_config": {
@@ -1562,6 +2157,44 @@
         }
       }
     },
+    "azuredevops_git_repository": {
+      "default_branch": {
+        "Type": "String",
+        "Computed": true
+      },
+      "is_fork": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "remote_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "size": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "ssh_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "web_url": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "azuredevops_group": {
       "descriptor": {
         "Type": "String",
@@ -1570,6 +2203,64 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_iteration": {
+      "children": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "has_children": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "path": {
+              "Type": "String",
+              "Computed": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "fetch_children": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "has_children": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "project_id": {
         "Type": "String",

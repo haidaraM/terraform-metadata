@@ -32,6 +32,12 @@
       "Optional": true,
       "Description": "Management Port to connect to Bigip"
     },
+    "teem_disable": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "If this flag set to true,sending telemetry data to TEEM will be disabled",
+      "DefaultFunc": "ENV(TEEM_DISABLE)"
+    },
     "token_auth": {
       "Type": "Bool",
       "Optional": true,
@@ -51,15 +57,86 @@
   },
   "resources": {
     "bigip_as3": {
+      "application_list": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of Application",
+        "Computed": true
+      },
       "as3_json": {
         "Type": "String",
         "Required": true,
         "Description": "AS3 json"
       },
+      "tenant_filter": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of Tenant"
+      },
+      "tenant_list": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of Tenant",
+        "Computed": true
+      },
       "tenant_name": {
         "Type": "String",
+        "Optional": true,
+        "Description": "Name of Tenant",
+        "Deprecated": "this attribute is no longer in use"
+      }
+    },
+    "bigip_bigiq_as3": {
+      "as3_json": {
+        "Type": "String",
         "Required": true,
-        "Description": "Name of Tenant"
+        "Description": "AS3 json"
+      },
+      "bigiq_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "bigiq_login_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Login reference for token authentication (see BIG-IQ REST docs for details)",
+        "DefaultFunc": "ENV(BIGIQ_LOGIN_REF)",
+        "Default": {
+          "Type": "string",
+          "Value": "tmos"
+        }
+      },
+      "bigiq_password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "bigiq_port": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The registration key pool to use"
+      },
+      "bigiq_token_auth": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable to use an external authentication source (LDAP, TACACS, etc)",
+        "DefaultFunc": "ENV(BIGIQ_TOKEN_AUTH)",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "bigiq_user": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "tenant_list": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of Tenant",
+        "Computed": true
       }
     },
     "bigip_cm_device": {
@@ -176,6 +253,130 @@
         }
       }
     },
+    "bigip_command": {
+      "command_result": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Partition of ssl certificate",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "commands": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The commands to send to the remote BIG-IP device over the configured provider",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "when": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "apply"
+        }
+      }
+    },
+    "bigip_common_license_manage_bigiq": {
+      "assignment_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Whether the specified device is a managed/un-managed/un-reachable device "
+      },
+      "bigiq_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "bigiq_login_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Login reference for token authentication (see BIG-IQ REST docs for details)",
+        "DefaultFunc": "ENV(BIGIQ_LOGIN_REF)",
+        "Default": {
+          "Type": "string",
+          "Value": "tmos"
+        }
+      },
+      "bigiq_password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "bigiq_port": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The registration key pool to use"
+      },
+      "bigiq_token_auth": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable to use an external authentication source (LDAP, TACACS, etc)",
+        "DefaultFunc": "ENV(BIGIQ_TOKEN_AUTH)",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "bigiq_user": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "device_license_status": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Status of Licence Assignment",
+        "Computed": true
+      },
+      "hypervisor": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Aws/Azure"
+      },
+      "key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The registration key that you want to assign from the pool"
+      },
+      "license_poolname": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The registration key pool to use"
+      },
+      "mac_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Sets the rate at which this license usage is billed"
+      },
+      "skukeyword1": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Sets the rate at which this license usage is billed"
+      },
+      "skukeyword2": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Sets the rate at which this license usage is billed"
+      },
+      "tenant": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "optional description for the assignment in this field"
+      },
+      "unit_of_measure": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Sets the rate at which this license usage is billed"
+      }
+    },
     "bigip_do": {
       "do_json": {
         "Type": "String",
@@ -184,8 +385,18 @@
       },
       "tenant_name": {
         "Type": "String",
-        "Required": true,
-        "Description": "unique identifier for DO resource"
+        "Optional": true,
+        "Description": "unique identifier for DO resource",
+        "Deprecated": "this attribute is no longer in use"
+      },
+      "timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "DO json",
+        "Default": {
+          "Type": "int",
+          "Value": "20"
+        }
       }
     },
     "bigip_ltm_datagroup": {
@@ -2312,69 +2523,49 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "int",
-          "Value": "30"
-        }
+        "Computed": true
       },
       "defaults_from": {
         "Type": "String",
         "Optional": true,
-        "Description": "Use the parent Fastl4 profile"
+        "Description": "Use the parent Fastl4 profile",
+        "Computed": true
       },
       "explicitflow_migration": {
         "Type": "String",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "string",
-          "Value": "disabled"
-        }
+        "Computed": true
       },
       "hardware_syncookie": {
         "Type": "String",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "string",
-          "Value": "enabled"
-        }
+        "Computed": true
       },
       "idle_timeout": {
         "Type": "String",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "string",
-          "Value": "300"
-        }
+        "Computed": true
       },
       "iptos_toclient": {
         "Type": "String",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "string",
-          "Value": "65535"
-        }
+        "Computed": true
       },
       "iptos_toserver": {
         "Type": "String",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "string",
-          "Value": "65535"
-        }
+        "Computed": true
       },
       "keepalive_interval": {
         "Type": "String",
         "Optional": true,
         "Description": "Use the parent Fastl4 profile",
-        "Default": {
-          "Type": "int",
-          "Value": "0"
-        }
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -2384,7 +2575,8 @@
       "partition": {
         "Type": "String",
         "Optional": true,
-        "Description": "name of partition"
+        "Description": "name of partition",
+        "Computed": true
       }
     },
     "bigip_ltm_profile_http": {
@@ -3319,11 +3511,8 @@
       "mask": {
         "Type": "String",
         "Optional": true,
-        "Description": "Mask can either be in CIDR notation or decimal, i.e.: \"24\" or \"255.255.255.0\". A CIDR mask of \"0\" is the same as \"0.0.0.0\"",
-        "Default": {
-          "Type": "string",
-          "Value": "255.255.255.255"
-        }
+        "Description": "subnet mask",
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -3389,10 +3578,7 @@
         "Type": "String",
         "Optional": true,
         "Description": "Source IP and mask for the virtual server",
-        "Default": {
-          "Type": "string",
-          "Value": "0.0.0.0/0"
-        }
+        "Computed": true
       },
       "source_address_translation": {
         "Type": "String",

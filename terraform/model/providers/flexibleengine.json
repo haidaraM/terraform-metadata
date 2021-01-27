@@ -568,7 +568,7 @@
               "Optional": true,
               "Default": {
                 "Type": "string",
-                "Value": "2020-11-10T22:03Z"
+                "Value": "2021-01-27T08:40Z"
               }
             }
           }
@@ -3681,7 +3681,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "/Users/mhaidara/.terraform/image_cache"
+          "Value": "/Users/mohamedelmouctarhaidara/.terraform/image_cache"
         }
       },
       "image_source_url": {

@@ -1093,6 +1093,13 @@
           }
         }
       },
+      "network_mode": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "network"
+        ]
+      },
       "personality": {
         "Type": "Set",
         "Optional": true,
@@ -2799,7 +2806,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "/Users/mhaidara/.terraform/image_cache"
+          "Value": "/Users/mohamedelmouctarhaidara/.terraform/image_cache"
         }
       },
       "image_source_url": {

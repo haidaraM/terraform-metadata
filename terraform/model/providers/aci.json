@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "aci",
   "type": "provider",
-  "version": "v0.4.0",
+  "version": "v0.5.4",
   "provider": {
     "cert_name": {
       "Type": "String",
@@ -7176,6 +7176,33 @@
         "Computed": true
       },
       "serial": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_fabric_path_ep": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "node_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "pod_id": {
         "Type": "String",
         "Required": true
       }

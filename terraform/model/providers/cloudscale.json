@@ -47,6 +47,11 @@
       "server": {
         "Type": "String",
         "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "cloudscale_network": {

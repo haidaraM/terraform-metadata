@@ -64,9 +64,8 @@
         "Description": "SDDC identifier"
       },
       "storage_capacity": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "For EBS-backed instances only, the requested storage capacity in GiB."
+        "Type": "String",
+        "Optional": true
       }
     },
     "vmc_public_ip": {

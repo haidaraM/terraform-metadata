@@ -3,13 +3,19 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "vsphere",
   "type": "provider",
-  "version": "v1.24.2",
+  "version": "v1.24.3",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
       "Optional": true,
       "Description": "If set, VMware vSphere client will permit unverifiable SSL certificates.",
       "DefaultFunc": "ENV(VSPHERE_ALLOW_UNVERIFIED_SSL)"
+    },
+    "api_timeout": {
+      "Type": "Int",
+      "Optional": true,
+      "Description": "API timeout in minutes (Default: 5)",
+      "DefaultFunc": "ENV(VSPHERE_API_TIMEOUT)"
     },
     "client_debug": {
       "Type": "Bool",
