@@ -130,6 +130,9 @@
     "go_envs": "GO111MODULE=on"
   },
   "hcloud": {},
+  "hcp": {
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+  },
   "hedvig": {},
   "helm": {},
   "heroku": {},

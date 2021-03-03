@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "consul",
   "type": "provider",
-  "version": "v2.10.1",
+  "version": "v2.11.0",
   "provider": {
     "address": {
       "Type": "String",
